@@ -4,6 +4,7 @@ public class HardwareTicket extends Ticket {
     private final boolean labCritical;    // true if affects a lab/classroom
     private final int affectedUsers;      // number of impacted users
 
+
     public HardwareTicket(int id, String requester, int priority, int daysOpen,
                           String deviceType, boolean labCritical, int affectedUsers) {
         super(id, requester, priority, daysOpen);
@@ -13,9 +14,11 @@ public class HardwareTicket extends Ticket {
         this.affectedUsers = affectedUsers;
     }
 
+
     public String getDeviceType() { return deviceType; }
     public boolean isLabCritical() { return labCritical; }
     public int getAffectedUsers() { return affectedUsers; }
+
 
     // -----------------------------------------
     // TODO #2 (Inheritance)
@@ -30,6 +33,20 @@ public class HardwareTicket extends Ticket {
     @Override
     public int urgencyScore() {
         // TODO #2
-        return -1;
+        int score = getPriority() * 10 + getDaysOpen() * 2;
+
+
+        if (labCritical) score += 20;
+
+
+        score += Math.min(affectedUsers, 30);
+
+
+        if (deviceType != null && deviceType.equalsIgnoreCase("Printer")) {
+            score += 5;
+        }
+
+
+        return score;
     }
 }

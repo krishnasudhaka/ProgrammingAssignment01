@@ -1,14 +1,17 @@
 package org.example;
 
+
 public class TicketBoard {
     private final Ticket[] tickets;
     private int size;
+
 
     public TicketBoard(int capacity) {
         if (capacity <= 0) throw new IllegalArgumentException("capacity must be > 0");
         this.tickets = new Ticket[capacity];
         this.size = 0;
     }
+
 
     // Array-of-objects operations
     public boolean add(Ticket t) {
@@ -18,12 +21,15 @@ public class TicketBoard {
         return true;
     }
 
+
     public int size() { return size; }
+
 
     public Ticket get(int index) {
         if (index < 0 || index >= size) throw new IndexOutOfBoundsException();
         return tickets[index];
     }
+
 
     public void printAll() {
         for (int i = 0; i < size; i++) {
@@ -36,9 +42,11 @@ public class TicketBoard {
         mergeSort(tickets, temp, 0, size);
     }
 
+
     private void mergeSort(Ticket[] arr, Ticket[] temp, int left, int rightExclusive) {
         int n = rightExclusive - left;
         if (n <= 1) return;
+
 
         int mid = left + n / 2;
         mergeSort(arr, temp, left, mid);
@@ -46,14 +54,17 @@ public class TicketBoard {
         merge(arr, temp, left, mid, rightExclusive);
     }
 
+
     private void merge(Ticket[] arr, Ticket[] temp, int left, int mid, int rightExclusive) {
         int i = left;      // left half pointer
         int j = mid;       // right half pointer
         int k = left;      // temp pointer
 
+
         while (i < mid && j < rightExclusive) {
             int leftScore = arr[i].urgencyScore();
             int rightScore = arr[j].urgencyScore();
+
 
             // DESCENDING by score
             // STABLE tie-break: if equal, take from LEFT half first.
@@ -64,6 +75,7 @@ public class TicketBoard {
             }
         }
 
+
         while (i < mid) {
             temp[k++] = arr[i++];
         }
@@ -71,11 +83,13 @@ public class TicketBoard {
             temp[k++] = arr[j++];
         }
 
+
         // copy back to original array
         for (int idx = left; idx < rightExclusive; idx++) {
             arr[idx] = temp[idx];
         }
     }
+
 
     // ---------------------------------------------------------
     // TODO #4 (Algorithm Completion): Binary Search by ID
@@ -85,8 +99,28 @@ public class TicketBoard {
     // ---------------------------------------------------------
     public Ticket findByIdBinarySearch(int id) {
         // TODO #5
+        int low = 0;
+        int high = size - 1;
+
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            int midId = tickets[mid].getId();
+
+
+            if (midId == id) {
+                return tickets[mid];
+            } else if (midId < id) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+
         return null;
     }
+
 
     // Utility: sort by ID ascending (already implemented)
     // (Used only to prepare for binary search)

@@ -1,9 +1,11 @@
 package org.example;
 
+
 public class SoftwareTicket extends Ticket {
     private final String system;         // e.g., "Email", "LMS", "VPN"
     private final boolean securityIssue;  // true if security-related
     private final boolean affectsLogin;   // true if blocks login
+
 
     public SoftwareTicket(int id, String requester, int priority, int daysOpen,
                           String system, boolean securityIssue, boolean affectsLogin) {
@@ -13,9 +15,11 @@ public class SoftwareTicket extends Ticket {
         this.affectsLogin = affectsLogin;
     }
 
+
     public String getSystem() { return system; }
     public boolean isSecurityIssue() { return securityIssue; }
     public boolean isAffectsLogin() { return affectsLogin; }
+
 
     // -----------------------------------------
     // TODO #3 (Inheritance)
@@ -30,6 +34,18 @@ public class SoftwareTicket extends Ticket {
     @Override
     public int urgencyScore() {
         // TODO #3
-        return -1;
+        int score = getPriority() * 10 + getDaysOpen();
+
+
+        if (securityIssue) score += 25;
+        if (affectsLogin) score += 15;
+
+
+        if (system != null && system.equalsIgnoreCase("VPN")) {
+            score += 8;
+        }
+
+
+        return score;
     }
 }
